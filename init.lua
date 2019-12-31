@@ -93,20 +93,40 @@ minetest.register_chatcommand("t-ban", {
 	end,
 })
 
-minetest.register_chatcommand("t-hp", {
-	params = "<player>",
-	description = "remove 2 hp from a player",
+--removes user specified hp from user specified player
+minetest.register_chatcommand("remove_hp", {
+	params = "<player> <hp>",
+	description = "remove <hp> from <player>",
 	privs = {troll=true},
-	func = function( _ , player, amount)
+	func = function(name, params)
 
+		local player, value = params:match("^(%S+)%s*([%d.]*)$")
+		local hp_var = tonumber(value)
 		local player2 = minetest.get_player_by_name(player)
 		if not player2 then
 			return
 		end
-			player2:set_hp(player2:get_hp() - 2)
+			player2:set_hp(player2:get_hp() - hp_var)
 	end,
 })
 
+--adds user specified hp from user specified player
+minetest.register_chatcommand("add_hp", {
+	params = "<player> <hp>",
+	description = "add <hp> to <player>",
+	privs = {troll=true},
+	func = function(name, params)
+
+		--local player, hp_var = string.match(param, "^(%S+)%s*([%d.]*)$")
+		local player, value = params:match("^(%S+)%s*([%d.]*)$")
+		local hp_var = tonumber(value)
+		local player2 = minetest.get_player_by_name(player)
+		if not player2 then
+			return
+		end
+			player2:set_hp(player2:get_hp() + hp_var)
+	end,
+})
 
 
 
@@ -301,7 +321,7 @@ minetest.register_chatcommand("t-mob", {
 			minetest.chat_send_player(name, "Please type in a player name")
             return
 		end
-		
+
 		if not amount then
 			minetest.chat_send_player(name, "Please type in an amount")
             return
@@ -312,7 +332,7 @@ minetest.register_chatcommand("t-mob", {
             return
 		end
 
-		
+
 		if not mob then
 			minetest.chat_send_player(name, "Please type in an entity")
             return
@@ -320,16 +340,16 @@ minetest.register_chatcommand("t-mob", {
 
         local ref = minetest.get_player_by_name(player)
 		if ref then
-			for i = amount,1,-1 
-			do 
+			for i = amount,1,-1
+			do
 				local pos = ref:get_pos()
-				minetest.add_entity(pos, mob) 
+				minetest.add_entity(pos, mob)
 			end
-            
+
         end
     end
 
-    
+
 })
 
 
@@ -532,4 +552,3 @@ minetest.register_chatcommand("t-grant", {
 		minetest.chat_send_player(to, ""..from.." granted you priviliges: "..priv.."")
 	end,
    })
-   
