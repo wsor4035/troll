@@ -93,42 +93,160 @@ minetest.register_chatcommand("t-ban", {
 	end,
 })
 
---removes user specified hp from user specified player
-minetest.register_chatcommand("remove_hp", {
-	params = "<player> <hp>",
-	description = "remove <hp> from <player>",
-	privs = {troll=true},
-	func = function(name, params)
-
-		local player, value = params:match("^(%S+)%s*([%d.]*)$")
-		local hp_var = tonumber(value)
-		local player2 = minetest.get_player_by_name(player)
-		if not player2 then
-			return
-		end
-			player2:set_hp(player2:get_hp() - hp_var)
-	end,
-})
-
---adds user specified hp from user specified player
-minetest.register_chatcommand("add_hp", {
+--adds or removes user specified hp from the user specified player
+minetest.register_chatcommand("change_hp", {
 	params = "<player> <hp>",
 	description = "add <hp> to <player>",
 	privs = {troll=true},
 	func = function(name, params)
 
-		--local player, hp_var = string.match(param, "^(%S+)%s*([%d.]*)$")
-		local player, value = params:match("^(%S+)%s*([%d.]*)$")
+		--puting stuff into variables
+		local pname, value = unpack(params:split(" "))
 		local hp_var = tonumber(value)
-		local player2 = minetest.get_player_by_name(player)
-		if not player2 then
-			return
+
+		--statements to check for missing values
+		if not pname then
+			return false, "please enter a players name"
 		end
-			player2:set_hp(player2:get_hp() + hp_var)
+		if not hp_var then
+			return false, "please enter a value to increase the players hp by"
+		end
+		if math.floor(hp_var) ~= hp_var then
+			return false, "Please enter whole numbers only."
+		end
+
+		--creates the object reference
+		local player = minetest.get_player_by_name(pname)
+
+		--more checks(this check has to be after player is created and player can not be created before otherwise an empty command with no args crashes server)
+		if not player then
+			return false, "please enter a players name"
+		end
+
+		--actaully increases the players hp
+		player:set_hp(player:get_hp() + hp_var)
+
+		--sends info to user who intiated command
+		return true, "HP of " .. pname .. " is changed by " .. hp_var .. " to " .. player:get_hp()
 	end,
 })
 
+--shrinks a specified user
+minetest.register_chatcommand("shrink_player", {
+	params = "<player>",
+	description = "shrinks specified <player>",
+	privs = {troll=true},
+  func = function(name, params)
 
+		--puting stuff into variables
+		local pname = params
+
+		--check on that a name has been inputed
+		if not pname then
+			return false, "please enter a players name"
+		end
+
+		--creates an object reference
+    local player = minetest.get_player_by_name(pname)
+
+		--checks to make sure player exisits
+		if not player then
+			return false, "please enter a valid players name"
+		end
+
+		--runs only if the player exisits
+    if player then
+			--code that changes all the players settings
+      player:set_properties({
+        visual_size = {x = 0.5, y = 0.5, z = 0.5},
+        collisionbox = {-0.5 / 2, 0, -0.5 / 2, 0.5 / 2, 1 / 2, 0.5 / 2},
+        selectionbox = {-0.5 / 2, 0, -0.5 / 2, 0.5 / 2, 1 / 2, 0.5 / 2},
+				eye_height = 1.625 / 3,
+      })
+
+			--returns info to the user that intiated the command
+			return true, pname .. " has been successfully shrunk"
+    end
+  end,
+})
+
+--grows a specified user
+minetest.register_chatcommand("grow_player", {
+	params = "<player>",
+	description = "grows specified <player>",
+	privs = {troll=true},
+  func = function(name, params)
+
+		--puting stuff into variables
+		local pname = params
+
+		--check on that a name has been inputed
+		if not pname then
+			return false, "please enter a players name"
+		end
+
+		--creates an object reference
+    local player = minetest.get_player_by_name(pname)
+
+		--checks to make sure player exisits
+		if not player then
+			return false, "please enter a valid players name"
+		end
+
+		--runs only if the player exisits
+    if player then
+			--code that changes all the players settings
+      player:set_properties({
+				visual_size = {x = 5, y = 5, z = 5},
+        collisionbox = {-0.5 * 3, 0, -0.5 * 3, 0.5 * 3, 1 * 2, 0.5 * 3},
+        selectionbox = {-0.5 * 5, 0, -0.5 * 5, 0.5 * 5, 1 * 2, 0.5 * 5},
+				eye_height = 1.625 * 5,
+      })
+
+			--returns info to the user that intiated the command
+			return true, pname .. " has been successfully growen"
+    end
+  end,
+})
+
+--resets a specified user size
+minetest.register_chatcommand("reset_player", {
+	params = "<player>",
+	description = "resets a specified players isze",
+	privs = {troll=true},
+  func = function(name, params)
+
+		--puting stuff into variables
+		local pname = params
+
+		--check on that a name has been inputed
+		if not pname then
+			return false, "please enter a players name"
+		end
+
+		--creates an object reference
+    local player = minetest.get_player_by_name(pname)
+
+		--checks to make sure player exisits
+		if not player then
+			return false, "please enter a valid players name"
+		end
+
+		--runs only if the player exisits
+    if player then
+			--code that changes all the players settings
+      player:set_properties({
+				visual_size = {x = 1, y = 1, z = 1},
+        collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
+        selectionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
+				eye_height = 1.625,
+      })
+
+			--returns info to the user that intiated the command
+			return true, pname .. " has been successfully reset"
+    end
+  end,
+})
 
 minetest.register_chatcommand("t-error", {
 	params = "<player>",
