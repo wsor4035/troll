@@ -1,9 +1,9 @@
 # Minetest troll mod
 
-##instalation guide
+## instalation guide
 download mod, rename folder to troll  
 
-##list of commands and what they do
+## list of commands and what they do
 * /change_hp: removes specified hp from the specified player
 * /grow_player: makes specified player 5x bigger than default values
 * /shrink_player: makes a specified player 1/2 default size
@@ -31,14 +31,14 @@ download mod, rename folder to troll
 * /t-chat sender message: Send something in the chat with another name!
 * /t-msg fromstring toplayer msgstring: Send an msg from another player
 
-##todo
+## todo
 
-###fix/modify
+### fix/modify
 * "the field of view doesn't change, which means I only have the impression of being higher and not taller" - look into fov on /grow_player
 * "collision box doesn't seem tall enough when giant (like 3 blocks instead of 6)" - was set smaller, will be fixed
 * "jumping doesn't scale when growing (but does when shrinked)" - will look into it
 * "when going in F7 mode, the camera distance doesn't scale" - known issue, have to do some research
 
-###planned
+### planned
 * spawn a mob under a player, tie them to the mob, and vanish them.
 * possible screw with inventory
