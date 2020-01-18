@@ -1,6 +1,16 @@
-# Minetest troll mod
+# Minetest Troll Mod
 
-## instalation guide
+a mod for trolling minetest players  
+
+## About
+
+mod forked from Niwla23, few modifications and added commands by me. licensed under MIT.
+
+## Links
+
+* [Github](https://github.com/wsor4035/troll)
+
+## Setup
 download mod, rename folder to troll  
 
 ## list of commands and what they do
